@@ -11,7 +11,7 @@ const STYLE = `<style>
   .products{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:16px;margin-top:16px}
   .products figure{margin:0;border:1px solid #eee;border-radius:10px;padding:12px}
   .products img{width:100%;height:auto;display:block} figcaption{margin-top:8px}
-  small{color:#777} label{display:block;margin:12px 0 4px} input{font:inherit;padding:6px 8px;width:260px}
+  small{color:#777} code{font-size:14px} label{display:block;margin:12px 0 4px} input{font:inherit;padding:6px 8px;width:260px}
 </style>`;
 
 const head = (title) =>
@@ -21,6 +21,20 @@ export const PAGE = `${head("Cloudflare lab")}
 <h1>Cloudflare lab</h1>
 <p>A small storefront on Cloudflare's developer platform. The "AWS origin" behind it is simulated:
 an 800 ms delay inside the Worker.</p>
+
+<h2>What's running here</h2>
+<table>
+  <thead><tr><th>Piece</th><th>Where</th><th>Status</th></tr></thead>
+  <tbody>
+    <tr><td>Edge cache</td><td><code>/api/products</code></td><td>Real Cache API. The AWS origin is simulated.</td></tr>
+    <tr><td>Product images</td><td><code>/images/*</code></td><td>Real R2 bucket</td></tr>
+    <tr><td>WAF custom rule</td><td><code>/.env</code>, <code>/wp-login.php</code></td><td>Real, returns 403</td></tr>
+    <tr><td>Rate limiting</td><td><a href="/login">/login</a></td><td>Real, returns 429 after repeated attempts</td></tr>
+    <tr><td>Client-Side Security</td><td>this page</td><td>Real script monitoring (CSP report-only header on a sample of page loads)</td></tr>
+    <tr><td>Access</td><td><a href="/admin">/admin</a></td><td>Real, login required</td></tr>
+    <tr><td>Tunnel, Hyperdrive, AWS</td><td>–</td><td>Described only, not built yet</td></tr>
+  </tbody>
+</table>
 
 <h2>Products</h2>
 <p><small>Images are served from an R2 bucket. Catalog generated at <span id="generated">…</span>.</small></p>
