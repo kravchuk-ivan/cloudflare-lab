@@ -36,13 +36,19 @@ for i in $(seq 1 12); do
 done
 echo; echo "(401 = Worker rejected the login; 429 = Cloudflare stopped it first)"
 
-section "6. Client-Side Security: Cloudflare adds a CSP report-only header (to a sample of responses)"
+section "6. Client-Side Security: Cloudflare adds a CSP report-only header to a sample of browser page loads"
 found=""
-for i in $(seq 1 20); do
-  found=$(curl -s -D - -o /dev/null -H 'Cache-Control: no-cache' "$BASE/" | grep -i '^content-security-policy-report-only:')
+for i in $(seq 1 10); do
+  found=$(curl -s -D - -o /dev/null "$BASE/" | grep -i '^content-security-policy-report-only:')
   [ -n "$found" ] && break
 done
-if [ -n "$found" ]; then echo "$found" | cut -c1-160; echo "(seen after $i request(s))"; else echo "not seen in 20 requests"; fi
+if [ -n "$found" ]; then
+  echo "$found" | cut -c1-160
+else
+  echo "not added for curl: Cloudflare may omit it for automated traffic, and curl doesn't run scripts anyway."
+  echo "Check it in a browser: DevTools > Network > the page request > Response headers,"
+  echo "and in the dashboard: Security > Client-side security > Scripts."
+fi
 
 section "7. Access: /admin needs a login, the rest of the site doesn't"
 curl -s -o /dev/null -D - "$BASE/admin" | grep -iE '^(HTTP/|location:)' | cut -c1-120
