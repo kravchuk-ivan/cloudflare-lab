@@ -53,3 +53,10 @@ fi
 section "7. Access: /admin needs a login, the rest of the site doesn't"
 curl -s -o /dev/null -D - "$BASE/admin" | grep -iE '^(HTTP/|location:)' | cut -c1-120
 echo
+
+section "8. What the zone adds: the same Worker on two hostnames"
+DEV="${DEV_URL:-https://cloudflare-lab.p-ivan-kravchuk.workers.dev}"
+printf '%-58s %s\n' "$BASE/.env" "$(curl -s -o /dev/null -w '%{http_code}' "$BASE/.env")"
+printf '%-58s %s\n' "$DEV/.env" "$(curl -s -o /dev/null -w '%{http_code}' "$DEV/.env")"
+echo "(custom domain: the zone's WAF blocks it. workers.dev: no zone in front, so the Worker answers 404)"
+echo
