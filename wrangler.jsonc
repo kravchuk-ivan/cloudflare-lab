@@ -1,0 +1,13 @@
+{
+  "name": "cloudflare-lab",
+  "main": "src/index.js",
+  "compatibility_date": "2026-10-18",
+  // Custom domain: Cloudflare creates the DNS record and certificate on deploy.
+  // It's needed because the zone features used by the lab (WAF, rate limiting,
+  // Client-Side Security) only apply to hostnames in a zone you own.
+  "routes": [{ "pattern": "cloudflare-lab.webflexer.com", "custom_domain": true }],
+  // Kept on as a backup URL. Zone features don't apply there.
+  "workers_dev": true,
+  // Product images. The binding gives the Worker direct access to the bucket, with no keys.
+  "r2_buckets": [{ "binding": "IMAGES", "bucket_name": "cloudflare-lab-images" }]
+}

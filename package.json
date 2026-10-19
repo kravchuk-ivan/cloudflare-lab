@@ -1,0 +1,13 @@
+{
+  "name": "cloudflare-lab",
+  "private": true,
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "images:local": "for f in images/*.svg; do wrangler r2 object put \"cloudflare-lab-images/$(basename $f)\" --file \"$f\" --content-type image/svg+xml --local; done",
+    "images:remote": "for f in images/*.svg; do wrangler r2 object put \"cloudflare-lab-images/$(basename $f)\" --file \"$f\" --content-type image/svg+xml --remote; done"
+  },
+  "devDependencies": {
+    "wrangler": "4.151.1"
+  }
+}
