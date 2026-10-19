@@ -31,7 +31,7 @@ done
 echo "(403 = blocked by Cloudflare; 404 = reached the Worker)"
 
 section "5. Rate limiting: repeated logins from one IP"
-for i in $(seq 1 12); do
+for i in $(seq 1 15); do
   printf '%s ' "$(curl -s -o /dev/null -w '%{http_code}' -X POST -d 'email=a@example.com&password=x' "$BASE/login")"
 done
 echo; echo "(401 = Worker rejected the login; 429 = Cloudflare stopped it first)"
